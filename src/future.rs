@@ -1,6 +1,6 @@
 use crate::ThinBox;
 use docfg::docfg;
-use std::{alloc::Allocator, future::Future, pin::Pin, ops::DerefMut};
+use std::{alloc::Allocator, future::Future, pin::Pin};
 
 impl<T: ?Sized + Future + Unpin, A: 'static + Allocator> Future for ThinBox<T, A> {
     type Output = T::Output;
@@ -120,7 +120,7 @@ impl<T: ?Sized + futures::AsyncBufRead + Unpin, A: 'static + Allocator> futures:
 {
     #[inline]
     fn poll_fill_buf<'a> (self: Pin<&'a mut Self>, cx: &mut std::task::Context<'_>) -> std::task::Poll<std::io::Result<&'a [u8]>> {
-        let pin: Pin<&'a mut T> = Pin::new(Pin::get_mut(self).deref_mut());
+        let pin: Pin<&'a mut T> = Pin::new(std::ops::DerefMut::deref_mut(Pin::get_mut(self)));
         T::poll_fill_buf(pin, cx)
     }
 

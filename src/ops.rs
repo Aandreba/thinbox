@@ -1,4 +1,4 @@
-use std::alloc::Allocator;
+use std::{alloc::Allocator, error::Error, hash::Hash};
 use crate::ThinBox;
 
 impl<T: Clone, A: Allocator + Clone> Clone for ThinBox<T, A> {
@@ -47,6 +47,20 @@ impl<T: ?Sized + Ord, A: Allocator> Ord for ThinBox<T, A> {
     #[inline]
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         T::cmp(self, other)
+    }
+}
+
+impl<T: ?Sized + Hash, A: Allocator> Hash for ThinBox<T, A> {
+    #[inline]
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.ptr.hash(state);
+    }
+}
+
+impl<T: ?Sized + Error, A: Allocator> Error for ThinBox<T, A> {
+    #[inline]
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        T::source(self)
     }
 }
 

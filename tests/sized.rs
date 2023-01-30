@@ -9,5 +9,6 @@ fn new () {
 #[test]
 fn func () {
     let mut f: ThinBox<dyn FnMut()> = ThinBox::new_unsize(|| println!("Hello"));
-    f();
+    let v = f.into_raw();
+    //f();
 }

@@ -30,7 +30,7 @@ use std::{
     ptr::{NonNull, Pointee},
 };
 
-flat_mod! { r#fn, iter, ops, future }
+flat_mod! { r#fn, iter, ops, future, ser_de, io }
 
 pub struct ThinBox<T: ?Sized, A: Allocator = Global> {
     ptr: NonNull<u8>,
