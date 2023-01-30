@@ -1,5 +1,5 @@
 use std::ops::Deref;
-use thinbox::ThinBox;
+use thinnbox::ThinBox;
 
 #[test]
 fn sized () {

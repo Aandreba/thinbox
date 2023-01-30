@@ -1,5 +1,5 @@
 [package]
-name = "thinbox"
+name = "thinnbox"
 description = "An expansion of the currently nightly ThinBox of the standard library"
 authors = ["Alex Andreba <aandrebafreelancer@gmail.com>"]
 version = "0.1.0"
