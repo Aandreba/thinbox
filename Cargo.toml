@@ -1,7 +1,12 @@
 [package]
 name = "thinbox"
+description = "An expansion of the currently nightly ThinBox of the standard library"
+authors = ["Alex Andreba <aandrebafreelancer@gmail.com>"]
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/Aandreba/thinbox"
+category = ["data-structures", "memory-management", "rust-patterns"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [features]

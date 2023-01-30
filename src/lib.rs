@@ -9,7 +9,11 @@
     fn_traits,
     tuple_trait
 )]
-#![cfg_attr(feature = "unsized_locals", allow(incomplete_features), feature(unsized_locals))]
+#![cfg_attr(
+    feature = "unsized_locals",
+    allow(incomplete_features),
+    feature(unsized_locals)
+)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
 macro_rules! flat_mod {
@@ -149,7 +153,7 @@ impl<T: ?Sized, A: Allocator> ThinBox<T, A> {
 
             let ptr = this.value_ptr().sub(offset);
             this.alloc.deallocate(NonNull::new_unchecked(ptr), layout);
-            return value
+            return value;
         }
     }
 
@@ -168,7 +172,7 @@ impl<T: ?Sized, A: Allocator> ThinBox<T, A> {
 
             let ptr = this.value_ptr().sub(offset);
             this.alloc.deallocate(NonNull::new_unchecked(ptr), layout);
-            return (value, core::ptr::read(&this.alloc))
+            return (value, core::ptr::read(&this.alloc));
         }
     }
 
@@ -201,6 +205,17 @@ impl<T: ?Sized, A: Allocator> ThinBox<T, A> {
     #[inline]
     pub fn allocator(&self) -> &A {
         return &self.alloc;
+    }
+
+    #[inline]
+    pub fn heap_layout(&self) -> Layout {
+        unsafe {
+            let layout = Layout::for_value_raw(self.deref());
+            return Layout::new::<<T as Pointee>::Metadata>()
+                .extend(layout)
+                .unwrap_unchecked()
+                .0;
+        }
     }
 
     #[inline]
@@ -239,18 +254,18 @@ impl<T: ?Sized, A: Allocator> DerefMut for ThinBox<T, A> {
     }
 }
 
-
 impl<T: ?Sized, A: Allocator> Drop for ThinBox<T, A> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
-            let ptr: *mut T = self.deref_mut();
-            
+            let ptr: *mut T =
+                core::ptr::from_raw_parts_mut(self.value_ptr() as *mut (), self.metadata());
+
             let layout = Layout::for_value_raw(ptr);
             let (layout, offset) = Layout::new::<<T as Pointee>::Metadata>()
-            .extend(layout)
-            .unwrap_unchecked();
-            
+                .extend(layout)
+                .unwrap_unchecked();
+
             core::ptr::drop_in_place(ptr);
             let ptr = ptr.cast::<u8>().sub(offset);
             self.alloc.deallocate(NonNull::new_unchecked(ptr), layout);
