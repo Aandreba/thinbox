@@ -6,9 +6,9 @@ fn new () {
     println!("{v:?}");
 }
 
+#[cfg(feature = "unsized_locals")]
 #[test]
 fn func () {
-    let mut f: ThinBox<dyn FnMut()> = ThinBox::new_unsize(|| println!("Hello"));
-    let v = f.into_raw();
-    //f();
+    let mut f = ThinBox::from_once(|| println!("Hello"));
+    f();
 }

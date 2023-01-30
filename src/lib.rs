@@ -9,7 +9,7 @@
     fn_traits,
     tuple_trait
 )]
-#![cfg_attr(feature = "unsized_locals", feature(unsized_locals))]
+#![cfg_attr(feature = "unsized_locals", allow(incomplete_features), feature(unsized_locals))]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
 macro_rules! flat_mod {
