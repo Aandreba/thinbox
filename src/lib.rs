@@ -177,6 +177,11 @@ impl<T: ?Sized, A: Allocator> ThinBox<T, A> {
     }
 
     #[inline]
+    pub unsafe fn as_raw (&self) -> NonNull<()> {
+        return self.ptr.cast()
+    }
+
+    #[inline]
     pub fn into_raw_with_alloc(self) -> (NonNull<()>, A) {
         let this = ManuallyDrop::new(self);
         return unsafe { (this.ptr.cast(), core::ptr::read(&this.alloc)) };
@@ -189,6 +194,16 @@ impl<T: ?Sized, A: Allocator> ThinBox<T, A> {
             alloc,
             _phtm: PhantomData,
         };
+    }
+
+    #[inline]
+    pub unsafe fn ref_from_raw<'a> (ptr: NonNull<()>) -> &'a mut T {
+        let ptr = ptr.as_ptr();
+        let meta = *ptr
+            .byte_sub(core::mem::size_of::<<T as Pointee>::Metadata>())
+            .cast::<<T as Pointee>::Metadata>();
+
+        unsafe { &mut *core::ptr::from_raw_parts_mut::<T>(ptr, meta) }
     }
 
     #[inline]

@@ -2,7 +2,7 @@
 name = "thinnbox"
 description = "An expansion of the currently nightly ThinBox of the standard library"
 authors = ["Alex Andreba <aandrebafreelancer@gmail.com>"]
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/Aandreba/thinbox"

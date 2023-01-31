@@ -44,7 +44,18 @@ fn fn_mut () {
 
 #[test]
 fn fn_once () {
-    let mut f = ThinBox::from_once_checked(|| println!("Hello"));
+    let mut f = ThinBox::<dyn FnMut() -> Option<()>>::from_once_checked(|| println!("Hello"));
     assert!(f().is_some());
     assert!(f().is_none());
+}
+
+#[test]
+fn ref_from_raw () {
+    let f = ThinBox::<dyn Fn()>::new_unsize(|| println!("Hello"));
+    let raw = f.into_raw();
+
+    let f = unsafe { ThinBox::<dyn Fn()>::ref_from_raw(raw) };
+    f();
+    
+    let _ = unsafe { ThinBox::<dyn Fn()>::from_raw(raw) };
 }
