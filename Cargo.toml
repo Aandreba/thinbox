@@ -2,7 +2,7 @@
 name = "thinnbox"
 description = "An expansion of the currently nightly ThinBox of the standard library"
 authors = ["Alex Andreba <aandrebafreelancer@gmail.com>"]
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/Aandreba/thinbox"
@@ -14,5 +14,5 @@ unsized_locals = []
 
 [dependencies]
 docfg = "0.1.0"
-futures = { version = "0.3.25", optional = true }
+futures = { version = "0.3.26", optional = true }
 serde = { version = "1.0.152", optional = true }
